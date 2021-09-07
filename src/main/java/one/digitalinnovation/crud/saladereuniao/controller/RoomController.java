@@ -4,6 +4,7 @@ package one.digitalinnovation.crud.saladereuniao.controller;
 import one.digitalinnovation.crud.saladereuniao.exception.ResourceNotFoundException;
 import one.digitalinnovation.crud.saladereuniao.model.Room;
 import one.digitalinnovation.crud.saladereuniao.repository.RoomRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,7 @@ import java.util.Map;
 @RequestMapping("/api/v1")
 public class  RoomController {
 
+    @Autowired
     private RoomRepository roomRepository;
 
     @GetMapping("/rooms")
@@ -24,7 +26,7 @@ public class  RoomController {
         return roomRepository.findAll();
     }
 
-    @GetMapping("/rooms/id")
+    @GetMapping("/rooms/{id}")
     public ResponseEntity<Room> getRoomById(@PathVariable(value="id") long roomId) throws ResourceNotFoundException {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new ResourceNotFoundException("Room not found: "+ roomId));
@@ -51,6 +53,7 @@ public class  RoomController {
         return ResponseEntity.ok(updateRoom);
     }
 
+    @DeleteMapping("/rooms/{id}")
     public Map<String, Boolean> deletedRoom(@PathVariable(value="id") Long roomId) throws ResourceNotFoundException {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new ResourceNotFoundException("Room not found for this id:" + roomId));
